@@ -5,14 +5,18 @@ MAKE ?= make
 LIBS := -pthread
 
 CFLAGS := -I./ \
-         -I./*
+		  -I./*
 
-ALLFILES := $(shell find . -name '*.c')
+TARGETS := $(shell ls -l | grep ^d | awk '{print $$NF}')
+$(info All Targets are $(TARGETS))
 
+.PHONY: all clean $(TARGETS)
 
-all: $(ALLFILES)
-	$(eval FOLDERNAME := $(shell dirname $?))
-	$(CC) $(CFLAGS) $(LIBS) $? -o $(FOLDERNAME)/a.out
+all : clean $(TARGETS)
+
+$(TARGETS):
+	$(info Making $@)
+	$(CC) $(CFLAGS) $(LIBS) $@/main.c -o $@/a.out
 
 clean:
 	rm -f *.o
